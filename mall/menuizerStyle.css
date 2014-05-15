@@ -1,0 +1,221 @@
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+    border: 0 none;
+    font: inherit;
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+body {
+    line-height: 1;
+}
+ol, ul {
+    list-style: none outside none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after, q:before, q:after {
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {
+    display: block;
+}
+audio, canvas, video {
+    display: inline-block;
+}
+audio:not([controls]) {
+    display: none;
+}
+[hidden] {
+    display: none;
+}
+.wrapper {
+}
+.wrapper:before, .wrapper:after {
+    content: "";
+    display: table;
+}
+.wrapper:after {
+    clear: both;
+}
+body {
+    color: #222222;
+    font: 100.01%/1.375 Tahoma,Geneva,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+p {
+    margin-bottom: 22px;
+}
+b, strong {
+    font-weight: bold;
+}
+i, em {
+    font-style: italic;
+}
+pre, code {
+    font: 1em/1.375 monospace;
+}
+h1 {
+    font-size: 2.375em;
+    line-height: 1.1579;
+    margin-bottom: 22px;
+}
+li ul, li ol {
+    margin: 0;
+}
+ul, ol {
+    margin: 0.6875em 1.5em 1.375em 0;
+    padding-left: 1.5em;
+}
+ul {
+    list-style-type: disc;
+}
+ol {
+    list-style-type: decimal;
+}
+table {
+    margin-bottom: 1.375em;
+    width: 100%;
+}
+caption {
+    font-style: italic;
+    text-align: left;
+}
+thead {
+    border-bottom: 2px solid #222222;
+}
+th {
+    font-weight: bold;
+    text-align: left;
+    vertical-align: bottom;
+}
+th, td {
+    padding: 5px 10px 5px 5px;
+}
+tbody tr {
+    border-bottom: 1px solid #EEEEEE;
+}
+tbody tr:hover {
+    color: #000000;
+}
+tfoot {
+    font-style: italic;
+}
+.black {
+    color: #000000;
+}
+.blue {
+    color: #049CDB;
+}
+.green {
+    color: #46A546;
+}
+.red {
+    color: #9D261D;
+}
+.yellow {
+    color: #FFC40D;
+}
+.orange {
+    color: #F89406;
+}
+body {
+    margin: 8px auto;
+    max-width: 940px;
+}
+#flash {
+    background-color: rgba(238, 238, 238, 0.95);
+    border: 1px solid #999999;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px 5px #555555;
+    margin: 2em auto;
+    min-height: 10em;
+    padding: 1em;
+}
+#footer {
+    border-top: 1px solid #999999;
+    color: #999999;
+    font-size: smaller;
+    margin-top: 22px;
+    padding-top: 0.5em;
+}
+#footer a {
+    color: #999999;
+    text-decoration: none;
+}
+#footer a:hover {
+    color: #333333;
+    text-decoration: underline;
+}
+#flash {
+    height: 300px;
+    position: relative;
+}
+/**
+  * To add a new "submenu level", simply copy the css that has "display:none" after the ul and has "display: block;" direcly below it, add an > li > ul to it
+  * and move the :hover so it is on the li that is closest to the end.
+  * Probably wants to have "left:100%" instead of "top:100%" so the submenu displays on the right of the hovered element
+  */
+/********************************* DO NOT REMOVE THIS, THIS IS WHERE YOU WANT YOUR CSS TO GO IF YOU WANT TO ADD ANOTHER SUBMENU LEVEL *******************/
+.menuContainer > ul > li { display: block;float: left;position: relative; }
+.menuContainer ul li:hover {background: #f6f6f6;}
+
+/* Sub Menu Level 1 */
+.menuContainer > ul > li > ul { background-color: #fff;position: absolute;display: none;border: 1px solid #eee;top: 100%;width: 140px; }
+.menuContainer > ul > li:hover > ul { display: block; }
+.menuContainer > ul > li > ul > li { position: relative; }
+/* Sub Menu Level 2 */
+.menuContainer > ul > li > ul > li > ul{ background-color: #000;position: absolute;display: none;border: 1px solid #eee; left:100%; width: 140px; }
+.menuContainer > ul > li > ul > li:hover > ul{ display: block; }
+.menuContainer > ul > li > ul > li > ul > li{ position: relative; }
+/* Sub Menu Level 3 */
+.menuContainer > ul > li > ul > li > ul > li > ul{ background-color: #000;position: absolute;display: none;border: 1px solid #eee; left:100%; width: 140px; }
+.menuContainer > ul > li > ul > li > ul > li:hover > ul{ display: block; }
+.menuContainer > ul > li > ul > li > ul > li > ul > li{ position: relative; }
+/* Sub Menu Level 4 */
+.menuContainer > ul > li > ul > li > ul > li > ul > li > ul{ background-color: #000;position: absolute;display: none;border: 1px solid #eee; left:100%; width: 140px; }
+.menuContainer > ul > li > ul > li > ul > li > ul > li:hover > ul{ display: block; }
+.menuContainer > ul > li > ul > li > ul > li > ul > li > ul > li{ position: relative; }
+/* Sub Menu Level 5 */
+.menuContainer > ul > li > ul > li > ul > li > ul > li > ul > li > ul{ background-color: #000;position: absolute;display: none;border: 1px solid #eee; left:100%; width: 140px; }
+.menuContainer > ul > li > ul > li > ul > li > ul > li > ul > li:hover > ul{ display: block; }
+.menuContainer > ul > li > ul > li > ul > li > ul > li > ul > li > ul > li{ position: relative; }
+/**************************************************************************************************************************/
+
+ul.navigation {
+    display: table;
+    list-style: none outside none;
+    padding: 0.07em 0;
+    position: relative;
+    top: 0.14em;
+    z-index: 2;
+}
+ul.navigation li {
+    float: left;
+}
+ul.navigation li a {
+    background: none repeat scroll 0 0 #342800;
+    border-right: 0.07em solid #F5AB36;
+    border-top: 0.07em solid #F5AB36;
+    color: #73AFB6;
+    display: block;
+    margin: 0.07em;
+    padding: 0.94em 2.4em;
+    text-decoration: none;
+	font-weight: bold;
+	border-radius: 0.5em;
+}
+ul.navigation li a.selected {
+    background: none repeat scroll 0 0 #5F755E;
+    border-bottom: 0.07em solid #FFFFFF;
+    color: #344385;
+}
+.test {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-bottom: 1.56em solid #000000;
+    color: #344385;
+}

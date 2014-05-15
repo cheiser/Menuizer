@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Menuizer manual v0.1
+	 WRITTEN BY: Mattis Andersson -->
+<title>Description of jQuery Menu Plugin</title>
+
+<!-- <style type="text/css" src="./mall/style.css"></style><!-- -->
+<link rel="stylesheet" type="text/css" href="./mall/menuizerStyle.css">
+
+<script src="./mall/js/jquery.js"></script>
+<!-- <script src="./mall/js/less.min.js"></script><!-- -->
+<script src="./mall/js/modernizr.custom.91886.js"></script>
+<script type="text/javascript" src="menuizer.js"></script>
+
+<script type="text/javascript">
+	// TODO: possibly create an div with position:fixed and display on the side of the page when one clicks the menu
+	
+	
+	$(document).ready(function(){			
+		$("h3").on("click", function(event){
+			var thisName = $(this).attr("name");
+			$("#" + thisName).slideToggle();
+		});
+	});
+</script>
+
+<style type="text/css">
+.displayCodeHTML{
+	width:800px;
+	height:300px;
+	color:green;
+}
+
+.displayCodeJS{
+	width:800px;
+	height:150px;
+	color:red;
+}
+
+.displayCodeCSS{
+	width:800px;
+	height:150px;
+	color:blue;
+}
+
+h3
+{
+	font-family:"Times New Roman";
+	font-size:1.2em;
+	font-weight:bold;
+	position:relative;
+	top:5px;
+}
+
+h2
+{
+	font-family:"Times New Roman";
+	font-size:1.7em;
+	font-weight:bold;
+	position:relative;
+	top:10px;
+}
+
+.nodisplay
+{
+	display: none;
+}
+
+.display
+{
+	display: block;
+}
+
+.valueDisplay
+{
+	color:green;
+}
+</style>
+</head>
+
+<body>
+<h1>Menuizer manual! Press subsection text to display it</h1>
+<div class="display">Press subsection text to display it!<br/><br/>
+
+First of all you should be aware that you should be running this via some sort of webserver or else the ajax-part of the menu won't work as
+it counts it as cross-origin if you try to run your .html-file directly in your browser, eg. like the following adress:
+file:///C:/www/menuPlugin/description.html. The non ajax-part of the plugin will still work however if you just want to play around with 
+a local html-file for some reason.
+<br/>
+<br/>
+And do not forget to run menuize on each menu you got, you could also get all in one line with $(".menuContainer") but then you would be running the exact same
+setup on all of your menu's(if you got more than one) which is probably not what you want.
+<br/>
+<br/>
+Also always specify the class of the menu containing div as "menuContainer".
+
+<br/>
+<br/>
+The following browsers has been tested and proven compatible with the menuizer plugin(NOTE: different screen resolutions has not yet been tested but you should
+be able to fix this your self with a little bit of tweaking if it does not work properly).
+<br/>
+Tested webbrowsers: <b>Internet Explorer 11</b>(no extensive testing), <b>Google Chrome</b>(V34, well tested),
+<b>Mozilla Firefox</b>(V29.0.1, pretty well tested)
+</div>
+
+
+<h2>Installation and usage</h2>
+<h3 name="Installation">Installation</h3>
+<div id="Installation" name="Installation" class="nodisplay">
+Menuizer has been designed to be easy to use "out of the box" but still retaining a great deal of customizability so hopefully this section should be enough
+for you to get your menu up and running quickly.<br/><br/>
+
+First of all you should link the menuizer.js file in the file you intend to use Menuizer in, you should also link the menuizerStyle.css file. Depending on 
+where you have place the downloaded js and css files the following code could look a little different to you but the only thing that should differ is the
+file paths.<br/>
+
+<textarea class="displayCodeJS">
+    ... other header code ...
+	<script type="text/javascript" src="menuizer.js"></script>
+	<link rel="stylesheet" type="text/css" href="./mall/menuizerStyle.css">
+	... remaing header code followed by body ...
+</textarea>
+
+</div>
+
+<h3 name="Usage">Usage</h3>
+<div id="Usage" class="nodisplay">
+After you have properly linked the necessary files to Menuizer the next step is to set up the basic structure using html and then run the plugin on that.<br/>
+
+SOME BASIC HTML MENU CODE:
+<textarea class="displayCodeHTML">
+	<div id="menuContainingDiv" class="menuContainer">
+		<ul id="menuUL" class="navigation">
+			<li><a data-url="pageToLoadWhenThisIsPressed" href="javascript:void(0);">an item</a></li>
+			<li><a href="javascript:void(0);">an submenu</a>
+				<ul id="menuUL" class="navigation">
+					<li><a id="canAlsoUseIDToChooseThePageToBeLoadedOnClick" href="javascript:void(0);">a submenu item</a></li>
+					<li><a data-url="anotherPage" href="javascript:void(0);">another submenu item</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	
+	<div id="willContainTheAjaxLoadedPage">
+	</div>
+</textarea>
+
+<br/>
+Somethings that are important to notice about the above code is that the &lt;ul&gt; element is contained within a div with the class menuContainer, the id will
+also be important to notice as we will use that next to run Menuizer on the menu.
+<br/><br/>
+
+SOME BASIC MENUIZER CODE TO MAKE YOUR MENU FUNCTION PROPERLY USING AJAX
+<textarea class="displayCodeJS">
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#menuContainingDiv").menuize({"useAjax":"true", "ajaxLoadDiv":"willContainTheAjaxLoadedPage"});
+		});
+	</script>
+</textarea>
+<br/>
+The things important to note about the above code it that we use the id of the menu containing div in the html-code(using $("#menuContainingDiv")) and
+running menuize on that, to the menuizer function we send an object containing the "settings"(this is the
+'{"useAjax":"true", "ajaxLoadDiv":"willContainTheAjaxLoadedPage"}' part of the above code).
+
+<br/><br/>
+The above code should look similar to this:
+
+<div id="menuContainingDiv" class="menuContainer">
+	<ul id="menuUL" class="navigation">
+		<li><a data-url="pageToLoadWhenThisIsPressed" href="javascript:void(0);">an item</a></li>
+		<li><a href="javascript:void(0);">an submenu</a>
+			<ul id="menuUL" class="navigation">
+				<li><a id="canAlsoUseIDToChooseThePageToBeLoadedOnClick" href="javascript:void(0);">a submenu item</a></li>
+				<li><a data-url="anotherPage" href="javascript:void(0);">another submenu item</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<div id="willContainTheAjaxLoadedPage">
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#menuContainingDiv").menuize({"useAjax":"true", "ajaxLoadDiv":"willContainTheAjaxLoadedPage"});
+	});
+</script>
+	
+</div>
+
+<h2>Options with some examples</h2>
+<h3 name="indexOptions">options index - press me</h3>
+<div id="indexOptions" class="nodisplay">
+ADD ANCHORS HERE WHEN THE SECTIONS ARE DONE
+The overridable options that i will talk about how to use is as follows:<br/>
+"event"<br/>
+"divId"<br/>
+"divClass"<br/>
+"nonItem"<br/>
+"useAjax"<br/>
+"ajaxLoadDiv"<br/>
+"redirectOnVoid"<br/>
+"autoCorrect"<br/>
+"useExtension"<br/>
+"pageExtension"<br/>
+"imageExtension"<br/>
+"defaultMissingPageUrl"<br/>
+</div>
+
+
+<h3 name="eventOption">event option</h3>
+<div id="eventOption" class="nodisplay">
+The event option is where you specify what kind of event you want to be used to activate/follow the link on your menu. Is set as "event":"eventType", where
+eventType can be an event such as hover, mouseup, click etc. <br/><br/>
+<b class="valueDisplay">Default value:</b> "click"<br/>
+<b class="valueDisplay">Value type:</b> String<br/><br/>
+An example:
+<div id="eventOptionClick" class="menuContainer">
+	<ul id="optionEventClick" class="navigation">
+		<li><a href="javascript:void(0);">click</a></li>
+		<li><a href="javascript:void(0);">submenu1</a>
+			<ul id="submenu1OptionEventClick" class="navigation">
+				<li><a href="javascript:void(0);">item1</a></li>
+				<li><a href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+		<li><a href="javascript:void(0);">submenu2</a>
+			<ul id="submenu2OptionEventClick" class="navigation">
+				<li><a href="http://www.google.se">item1</a></li>
+				<li><a href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#eventOptionClick").menuize({"useAjax":false, "event":"click", "redirectOnVoid":false});
+	});
+</script>
+HTML:<br/>
+<textarea class="displayCodeHTML">
+<div id="eventOptionClick" class="menuContainer">
+	<ul id="optionEventClick" class="navigation">
+		<li><a href="javascript:void(0);">click</a></li>
+		<li><a href="javascript:void(0);">submenu1</a>
+			<ul id="submenu1OptionEventClick" class="navigation">
+				<li><a href="javascript:void(0);">item1</a></li>
+				<li><a href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+		<li><a href="javascript:void(0);">submenu2</a>
+			<ul id="submenu2OptionEventClick" class="navigation">
+				<li><a href="http://www.google.se">item1</a></li>
+				<li><a href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+</textarea>
+<br/>JavaScript:<br/>
+<textarea class="displayCodeJS">
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#eventOptionClick").menuize({"useAjax":false, "event":"click", "redirectOnVoid":false});
+	});
+</script>
+</textarea>
+
+</div>
+
+<h3 name="divIdOption">divIdOption</h3>
+<div id="divIdOption" class="nodisplay">
+The divId option is where you specify which div that will be used as parent, this is one of the options you probably will never touch as this gets selected
+automatically when the menuize code is first run, but you could give the id of another div here if you wanted to.<br/><br/>
+<b class="valueDisplay">Default value:</b> "navigation"<br/>
+<b class="valueDisplay">Value type:</b> String<br/><br/>
+
+<div id="eventOptionDivId" class="menuContainer">
+	<ul id="optionEventClick" class="navigation">
+		<li><a href="javascript:void(0);">click</a></li>
+		<li><a href="javascript:void(0);">submenu1</a>
+			<ul id="submenu1OptionEventClick" class="navigation">
+				<li><a href="javascript:void(0);">item1</a></li>
+				<li><a href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+		<li><a href="javascript:void(0);">submenu2</a>
+			<ul id="submenu2OptionEventClick" class="navigation">
+				<li><a href="http://www.google.se">item1</a></li>
+				<li><a href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#eventOptionDivId").menuize({"useAjax":false, "divId":"eventOptionDivId", "event":"click", "redirectOnVoid":false});
+	});
+</script>
+
+
+HTML:<br/>
+<textarea class="displayCodeHTML">
+	<div id="eventOptionDivId" class="menuContainer">
+		<ul id="optionEventClick" class="navigation">
+			<li><a href="javascript:void(0);">click</a></li>
+			<li><a href="javascript:void(0);">submenu1</a>
+				<ul id="submenu1OptionEventClick" class="navigation">
+					<li><a href="javascript:void(0);">item1</a></li>
+					<li><a href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+			<li><a href="javascript:void(0);">submenu2</a>
+				<ul id="submenu2OptionEventClick" class="navigation">
+					<li><a href="http://www.google.se">item1</a></li>
+					<li><a href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</textarea>
+
+
+<br/>JavaScript:<br/>
+<textarea class="displayCodeJS">
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#eventOptionDivId").menuize({"useAjax":false, "divId":"eventOptionDivId", "event":"click", "redirectOnVoid":false});
+		});
+	</script>
+</textarea>
+
+</div>
+
+
+
+<h3 name="divClassOption">divClass option</h3>
+<div id="divClassOption" class="nodisplay">
+Unless you also change in the css this option should always be menuContainer, this is set automatically and you do not need to concern yourself with it.<br/>
+<br/>
+<b class="valueDisplay">Default value:</b> "menuContainer"<br/>
+<b class="valueDisplay">Value type:</b> String<br/><br/>
+
+<div id="eventOptionDivClass" class="menuContainer">
+	<ul id="optionEventClick" class="navigation">
+		<li><a href="javascript:void(0);">click</a></li>
+		<li><a href="javascript:void(0);">submenu1</a>
+			<ul id="submenu1OptionEventClick" class="navigation">
+				<li><a href="javascript:void(0);">item1</a></li>
+				<li><a href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+		<li><a href="javascript:void(0);">submenu2</a>
+			<ul id="submenu2OptionEventClick" class="navigation">
+				<li><a href="http://www.google.se">item1</a></li>
+				<li><a href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#eventOptionDivId").menuize({"useAjax":false, "divClass":"menuContainer", "event":"click", "redirectOnVoid":false});
+	});
+</script>
+
+
+HTML:<br/>
+<textarea class="displayCodeHTML">
+	<div id="eventOptionDivClass" class="menuContainer">
+		<ul id="optionEventClick" class="navigation">
+			<li><a href="javascript:void(0);">click</a></li>
+			<li><a href="javascript:void(0);">submenu1</a>
+				<ul id="submenu1OptionEventClick" class="navigation">
+					<li><a href="javascript:void(0);">item1</a></li>
+					<li><a href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+			<li><a href="javascript:void(0);">submenu2</a>
+				<ul id="submenu2OptionEventClick" class="navigation">
+					<li><a href="http://www.google.se">item1</a></li>
+					<li><a href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</textarea>
+
+
+<br/>JavaScript:<br/>
+<textarea class="displayCodeJS">
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#eventOptionDivId").menuize({"useAjax":false, "divClass":"menuContainer", "event":"click", "redirectOnVoid":false});
+		});
+	</script>
+</textarea>
+
+</div>
+
+
+
+<h3 name="nonItemOption">nonItem option</h3>
+<div id="nonItemOption" class="nodisplay">
+EXPAND!
+This is the value that will be used as a postfix/data- value that specifies that an element should not be able to be pressed, eg. most of the times you do not
+want the parentelements in the menu to be pressed and then they will get a data-clickable value and postfix of this value, unless you have turned off
+autoCorrect these values will be set automatically on the parentelements.<br/><br/>
+<b class="valueDisplay">Default value:</b> "UnClickable"<br/>
+<b class="valueDisplay">Value type:</b> String<br/><br/>
+
+<div id="eventOptionNonItem" class="menuContainer">
+	<ul id="optionEventClick" class="navigation">
+		<li><a href="javascript:void(0);">click</a></li>
+		<li><a href="javascript:void(0);">submenu1</a>
+			<ul id="submenu1OptionEventClick" class="navigation">
+				<li><a href="javascript:void(0);">item1</a></li>
+				<li><a href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+		<li><a href="javascript:void(0);">submenu2</a>
+			<ul id="submenu2OptionEventClick" class="navigation">
+				<li><a href="http://www.google.se">item1</a></li>
+				<li><a href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#eventOptionClick").menuize({"useAjax":false, "event":"click", "redirectOnVoid":false, "nonItem":"cantClickThis"});
+	});
+</script>
+
+HTML:<br/>
+<textarea class="displayCodeHTML">
+	<div id="eventOptionNonItem" class="menuContainer">
+		<ul id="optionEventClick" class="navigation">
+			<li><a href="javascript:void(0);">click</a></li>
+			<li><a href="javascript:void(0);">submenu1</a>
+				<ul id="submenu1OptionEventClick" class="navigation">
+					<li><a href="javascript:void(0);">item1</a></li>
+					<li><a href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+			<li><a href="javascript:void(0);">submenu2</a>
+				<ul id="submenu2OptionEventClick" class="navigation">
+					<li><a href="http://www.google.se">item1</a></li>
+					<li><a href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</textarea>
+
+
+<br/>JavaScript:<br/>
+<textarea class="displayCodeJS">
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#eventOptionClick").menuize({"useAjax":false, "event":"click", "redirectOnVoid":false, "nonItem":"cantClickThis"});
+		});
+	</script>
+</textarea>
+
+</div>
+
+
+
+
+<h3 name="useAjaxOption">useAjax option</h3>
+<div id="useAjaxOption" class="nodisplay">
+The useAjax option specifies whether or not to use ajax to load the menu pages, if this is set to true you will also need to create an div into which the 
+content will be loaded, by default menuizer tries to load into a div with the id "ajaxDiv", but you can change the name of this with the ajaxLoadDiv option.
+<br /><br/>
+If you do not want to use AJAX you will need to make sure that the href attribute of the &lt;a&gt; elements are correctly pointed to the page you want
+to display.<br/><br/>
+
+Also menuizer will try to get the page name in the following order(when using ajax):<br/>
+data-url(you specify it in the html like "data-url='index'")<br/>
+id(you specify it in the html like "id='index'")<br/>
+href(you specify it in the html like "href='index.php'", it's important to include file-extension on this one as Menuizer does not include it automatically)
+<br/>
+src(should probably only be used on images)<br/><br/>
+<b class="valueDisplay">Default value:</b> "false"<br/>
+<b class="valueDisplay">Value type:</b> boolean(also accepts String)<br/><br/>
+
+
+<div id="eventOptionUseAjax" class="menuContainer">
+	<ul id="optionEventClick" class="navigation">
+		<li><a href="javascript:void(0);">click</a></li>
+		<li><a href="javascript:void(0);">submenu1</a>
+			<ul id="submenu1OptionEventClick" class="navigation">
+				<li><a href="javascript:void(0);">item1</a></li>
+				<li><a href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+		<li><a href="javascript:void(0);">submenu2</a>
+			<ul id="submenu2OptionEventClick" class="navigation">
+				<li><a href="http://www.google.se">item1</a></li>
+				<li><a href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#eventOptionUseAjax").menuize({"useAjax":false, "event":"click", "redirectOnVoid":false, "nonItem":"cantClickThis"});
+	});
+</script>
+
+HTML:<br/>
+<textarea class="displayCodeHTML">
+	<div id="eventOptionUseAjax" class="menuContainer">
+		<ul id="optionEventClick" class="navigation">
+			<li><a href="javascript:void(0);">click</a></li>
+			<li><a href="javascript:void(0);">submenu1</a>
+				<ul id="submenu1OptionEventClick" class="navigation">
+					<li><a href="javascript:void(0);">item1</a></li>
+					<li><a href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+			<li><a href="javascript:void(0);">submenu2</a>
+				<ul id="submenu2OptionEventClick" class="navigation">
+					<li><a href="http://www.google.se">item1</a></li>
+					<li><a href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</textarea>
+
+
+<br/>JavaScript:<br/>
+<textarea class="displayCodeJS">
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#eventOptionUseAjax").menuize({"useAjax":false, "event":"click", "redirectOnVoid":false, "nonItem":"cantClickThis"});
+		});
+	</script>
+</textarea>
+</div>
+
+
+
+
+<h3 name="ajaxLoadDivOption">ajaxLoadDiv option</h3>
+<div id="ajaxLoadDivOption" class="nodisplay">
+The ajaxLoadDiv option is an value that is only used when the useAjax option is set to true. This value specifies the id of the div into which the page
+requested will be loaded.<br/>
+<b class="valueDisplay">Default value:</b> "ajaxDiv"<br/>
+<b class="valueDisplay">Value type:</b> String<br/>
+
+<div id="eventOptionAjaxLoadDiv" class="menuContainer">
+	<ul id="optionEventClick" class="navigation">
+		<li><a href="mall.php">click</a></li>
+		<li><a href="javascript:void(0);">submenu1</a>
+			<ul id="submenu1OptionEventClick" class="navigation">
+				<li><a href="javascript:void(0);">item1</a></li>
+				<li><a href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+		<li><a href="javascript:void(0);">submenu2</a>
+			<ul id="submenu2OptionEventClick" class="navigation">
+				<li><a href="http://www.google.se">item1</a></li>
+				<li><a id="mall" href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<div id="loadThisDiv"></div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#eventOptionAjaxLoadDiv").menuize({"useAjax":true, "ajaxLoadDiv":"loadThisDiv", "event":"click", "redirectOnVoid":false, "nonItem":"cantClickThis"});
+	});
+</script>
+
+HTML:<br/>
+<textarea class="displayCodeHTML">
+	<div id="eventOptionAjaxLoadDiv" class="menuContainer">
+		<ul id="optionEventClick" class="navigation">
+			<li><a href="mall.php">click</a></li>
+			<li><a href="javascript:void(0);">submenu1</a>
+				<ul id="submenu1OptionEventClick" class="navigation">
+					<li><a href="javascript:void(0);">item1</a></li>
+					<li><a href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+			<li><a href="javascript:void(0);">submenu2</a>
+				<ul id="submenu2OptionEventClick" class="navigation">
+					<li><a href="http://www.google.se">item1</a></li>
+					<li><a id="mall" href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+
+	<div id="loadThisDiv"></div>
+</textarea>
+
+
+<br/>JavaScript:<br/>
+<textarea class="displayCodeJS">
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#eventOptionAjaxLoadDiv").menuize({"useAjax":true, "ajaxLoadDiv":"loadThisDiv", "event":"click", "redirectOnVoid":false, "nonItem":"cantClickThis"});
+		});
+	</script>
+</textarea>
+Notice that i on the object with the text "click", set the href to an actual page and also include the page extension.
+</div>
+
+
+<h3 name="redirectOnVoidOption">redirectOnVoid option</h3>
+<div id="redirectOnVoidOption" class="nodisplay">The redirectOnVoid option specifies whether or not to redirect when "javascript:void(0)" is encountered and ajax is not used. If
+set to true menuizer will try to redirect to first the "data-url" and if there is no such thing it will try the id and if that too fails it will try src and if
+there is no src(should probably only exists on img elements) it will redirect to an error page.
+<br/><br/>
+<b class="valueDisplay">Default value:</b> true<br/>
+<b class="valueDisplay">Value type:</b> boolean(accepts String aswell)<br/>
+<br/><br/>
+Just javascript/jQuery code on this one:
+
+
+<br/>JavaScript:<br/>
+<textarea class="displayCodeJS">
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#menuId1").menuize({"redirectOnVoid":"true"});
+			$("#menuId2").menuize({"redirectOnVoid":true});
+		});
+	</script>
+</textarea>
+</div>
+
+
+
+<h3 name="autoCorrectOption">autoCorrectOption</h3>
+<div id="autoCorrectOption" class="nodisplay">
+The autoCorrect option is one that you want to be turned on for the most part, especially when you are developing as it corrects errors and gives you warnings
+in the console window of your browsers debugger. You can when you are done developing turn this option of and check to see if the menu still works and if it
+does not then turn it back on and see how the corrected code differs from your own.<br/><br/>
+<b class="valueDisplay">Default value:</b> true<br/>
+<b class="valueDisplay">Value type:</b> boolean(accepts String aswell)<br/><br/>
+
+In this example we got two (near)identical menus, one we will menuize with autoCorrect set to true and the other one set to false and then we see the
+difference.
+
+<div id="eventOptionAutoCorrect1" class="menuContainer">
+	<ul id="optionEventClick" class="navigation">
+		<li><a href="javascript:void(0);">click</a></li>
+		<li><a href="javascript:void(0);">submenu1</a>
+			<ul id="submenu1OptionEventClick" class="navigation">
+				<li><a href="javascript:void(0);">item1</a></li>
+				<li><a href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+		<li><a>submenu2</a>
+			<ul id="submenu2OptionEventClick" class="navigation">
+				<li><a>item1</a></li>
+				<li><a id="mall" href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<br/><br/><br/><br/>
+
+<div id="eventOptionAutoCorrect2" class="menuContainer">
+	<ul id="optionEventClick" class="navigation">
+		<li><a href="javascript:void(0);">click</a></li>
+		<li><a href="javascript:void(0);">submenu1</a>
+			<ul id="submenu1OptionEventClick" class="navigation">
+				<li><a href="javascript:void(0);">item1</a></li>
+				<li><a href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+		<li><a>submenu2</a>
+			<ul id="submenu2OptionEventClick" class="navigation">
+				<li><a>item1</a></li>
+				<li><a id="mall" href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<div id="autoCorrectLoadDiv1"></div>
+<div id="autoCorrectLoadDiv2"></div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#eventOptionAutoCorrect1").menuize({"useAjax":true, "autoCorrect":"true", "ajaxLoadDiv":"autoCorrectLoadDiv1", "event":"click",
+			"redirectOnVoid":false, "nonItem":"cantClickThis"});
+		$("#eventOptionAutoCorrect2").menuize({"useAjax":"true", "autoCorrect":"false", "ajaxLoadDiv":"autoCorrectLoadDiv2", "event":"click",
+			"redirectOnVoid":false, "nonItem":"cantClickThis"});
+		
+	});
+</script>
+
+
+HTML:<br/>
+<textarea class="displayCodeHTML">
+	<div id="eventOptionAutoCorrect1" class="menuContainer">
+		<ul id="optionEventClick" class="navigation">
+			<li><a href="javascript:void(0);">click</a></li>
+			<li><a href="javascript:void(0);">submenu1</a>
+				<ul id="submenu1OptionEventClick" class="navigation">
+					<li><a href="javascript:void(0);">item1</a></li>
+					<li><a href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+			<li><a>submenu2</a>
+				<ul id="submenu2OptionEventClick" class="navigation">
+					<li><a>item1</a></li>
+					<li><a id="mall" href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+
+	<br/><br/><br/><br/>
+
+	<div id="eventOptionAutoCorrect2" class="menuContainer">
+		<ul id="optionEventClick" class="navigation">
+			<li><a href="javascript:void(0);">click</a></li>
+			<li><a href="javascript:void(0);">submenu1</a>
+				<ul id="submenu1OptionEventClick" class="navigation">
+					<li><a href="javascript:void(0);">item1</a></li>
+					<li><a href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+			<li><a>submenu2</a>
+				<ul id="submenu2OptionEventClick" class="navigation">
+					<li><a>item1</a></li>
+					<li><a id="mall" href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+
+	<div id="autoCorrectLoadDiv1"></div>
+	<div id="autoCorrectLoadDiv2"></div>
+</textarea>
+
+
+<br/>JavaScript:<br/>
+<textarea class="displayCodeJS">
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#eventOptionAutoCorrect1").menuize({"useAjax":true, "autoCorrect":"true", "ajaxLoadDiv":"autoCorrectLoadDiv1", "event":"click",
+				"redirectOnVoid":false, "nonItem":"cantClickThis"});
+			$("#eventOptionAutoCorrect2").menuize({"useAjax":"true", "autoCorrect":"false", "ajaxLoadDiv":"autoCorrectLoadDiv2", "event":"click",
+				"redirectOnVoid":false, "nonItem":"cantClickThis"});
+			
+		});
+	</script>
+</textarea>
+<br/>
+Some things we notice pretty early is for example that the parent-elements are clickable in the second example, this is because the autoCorrect set them as such
+automatically for us.<br/>
+Another thing we can notice is that we don't get the "finger pointer" in submenu2 in menu #2, the reason for this is because it does not have any href, but in
+the first example a href is created for us out of the id(note: because we did not originally have an id either the id was set as the value of "nonItem" because
+that element is an parent element).
+item1 under submenu2 in the first example gives an "finger pointer" while it in the second example gives an mouse pointer/indicator, this is because it does
+not have any href there either but the autoCorrect gives an href in the first example and sets it to "javascript:void(0);" it also displays this action in the
+console window so we know that there is an error with that.
+</div>
+
+
+
+
+<h3 name="pageExtensionOption">pageExtension options</h3>
+<div id="pageExtensionOption" class="nodisplay">This is the extension(.html, .php etc.) that will be automatically applied to links, set this to "" if you want to set the
+extensions yourself manually.<br/><br/>
+<b class="valueDisplay">Default value:</b> "php"<br/>
+<b class="valueDisplay">Value type:</b> String
+<br/><br/><br/>
+Just javascript/jQuery code on this one:
+
+<br/>JavaScript:<br/>
+<textarea class="displayCodeJS">
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#menuId1").menuize({"pageExtension":"html"});
+			$("#menuId2").menuize({"pageExtension":"php"});
+		});
+	</script>
+</textarea>
+
+
+</div>
+
+
+
+<h3 name="imageExtensionOption">imageExtension option</h3>
+<div id="imageExtensionOption" class="nodisplay">This will be the default extension to be used on images if not src is missing(if you have an id on the
+&lt;img&gt; element that is, it will then try to get id.imageExtension).<br/><br/>
+<b class="valueDisplay">Default value:</b> "png"<br/>
+<b class="valueDisplay">Value type:</b> String<br/><br/>
+Just javascript/jQuery code on this one:
+
+<br/>JavaScript:<br/>
+<textarea class="displayCodeJS">
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#menuId1").menuize({"imageExtension":"png"});
+			$("#menuId2").menuize({"imageExtension":"gif"});
+			$("#menuId3").menuize({"imageExtension":"jpg"});
+		});
+	</script>
+</textarea>
+</div>
+
+
+
+<h3 name="defaultMissingPageUrlOption">defaultMissingPageUrl option</h3>
+<div id="defaultMissingPageUrlOption" class="nodisplay">This option specifies the page to be used if some pages can't be found(Remember to add extension on
+this one, eg. "error.php", "error.html" etc.).<br/><br/>
+<b class="valueDisplay">Default value:</b>"error.php"<br/>
+<b class="valueDisplay">Value type:</b> String<br/><br/><br/>
+Just javascript/jQuery code on this one:
+
+<br/>JavaScript:<br/>
+<textarea class="displayCodeJS">
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#menuId1").menuize({"defaultMissingPageUrl":"customError1.php"});
+			$("#menuId2").menuize({"defaultMissingPageUrl":"customError2.php"});
+			$("#menuId3").menuize({"defaultMissingPageUrl":"customError3.html"});
+		});
+	</script>
+</textarea>
+</div>
+
+
+<h3 name="ajaxCallbackFunctionOption">ajaxCallbackFunction option</h3>
+<div id="ajaxCallbackFunctionOption" class="nodisplay">
+Custom ajax callback for when you need to do custom stuff on success/failure. Implement a function as "function functionName(response, status, xhr, options)"
+and link it to the ajaxCallbackFunction option.<br/><br/>
+<b class="valueDisplay">Default value:</b>defaultAjaxCallback<br/>
+<b class="valueDisplay">Value type:</b> Function pointer<br/>
+
+<div id="ajaxCallbackFunctionMenu1" class="menuContainer">
+	<ul id="optionEventClick" class="navigation">
+		<li><a id="finnsej" href="javascript:void(0);">click</a></li>
+		<li><a href="javascript:void(0);">submenu1</a>
+			<ul id="submenu1OptionEventClick" class="navigation">
+				<li><img src="http://r.ddmcdn.com/w_622/u_0/gif/23-milky-way-pictures.jpg" alt="test" width="100" height="100"></img>
+				<ul id="subsubMenu1" class="navigation">
+					<li><a href="javascript:void(0);">subsubmenuitem</a></li>
+				</ul>
+				</li>
+				<li><a href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+		<li><a>submenu2</a>
+			<ul id="submenu2OptionEventClick" class="navigation">
+				<li><a>item1</a></li>
+				<li><a id="mall" href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+		<li><a href="mall.php">mall</a></li>
+	</ul>
+</div>
+
+<br/><br/><br/><br/>
+
+
+<div id="callbackAjaxLoadDiv"></div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#ajaxCallbackFunctionMenu1").menuize({"useAjax":"true", "autoCorrect":"true", "ajaxLoadDiv":"callbackAjaxLoadDiv", "event":"click",
+			"redirectOnVoid":false, "nonItem":"cantClickThis", "ajaxCallbackFunction":testingCallback});
+	});
+	
+	function testingCallback(response, status, xhr, options){
+		console.log("custom callback: " + status);
+		
+		if(status === "error"){
+			$("#" + options.ajaxLoadDiv).html("Could not load the requested resource, double check so that the id etc. is correct and that the resource exist");
+		}
+	}
+</script>
+
+
+
+HTML:<br/>
+<textarea class="displayCodeHTML">
+	<div id="ajaxCallbackFunctionMenu1" class="menuContainer">
+		<ul id="optionEventClick" class="navigation">
+			<li><a id="finnsej" href="javascript:void(0);">click</a></li>
+			<li><a href="javascript:void(0);">submenu1</a>
+				<ul id="submenu1OptionEventClick" class="navigation">
+					<li><img src="http://r.ddmcdn.com/w_622/u_0/gif/23-milky-way-pictures.jpg" alt="test" width="100" height="100"></img>
+					<ul id="subsubMenu1" class="navigation">
+						<li><a href="javascript:void(0);">subsubmenuitem</a></li>
+					</ul>
+					</li>
+					<li><a href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+			<li><a>submenu2</a>
+				<ul id="submenu2OptionEventClick" class="navigation">
+					<li><a>item1</a></li>
+					<li><a id="mall" href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	
+	<br/><br/><br/><br/>
+	
+	<div id="callbackAjaxLoadDiv"></div>
+</textarea>
+
+
+<br/>JavaScript:<br/>
+<textarea class="displayCodeJS">
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#ajaxCallbackFunctionMenu1").menuize({"useAjax":"true", "autoCorrect":"true", "ajaxLoadDiv":"callbackAjaxLoadDiv", "event":"click",
+				"redirectOnVoid":false, "nonItem":"cantClickThis", "ajaxCallbackFunction":testingCallback});
+		});
+		
+		function testingCallback(response, status, xhr, options){
+			console.log("custom callback: " + status);
+			
+			if(status === "error"){
+				$("#" + options.ajaxLoadDiv).html("Could not load the requested resource, double check so that the id etc. is correct and that the resource exist");
+			}
+		}
+	</script>
+</textarea>
+
+<br/>
+This can be very useful if for example you are loading an ajax page inside an ajax page and the page's functions does not run, then you can implement this and
+call the functions that is not being called manually.
+</div>
+
+
+
+
+<h2>Other examples</h2>
+<p>These examples are alittle bit more elaborate and are stuff that you might sometimes want to do</p>
+
+<h3 name="elaborateIndex">Index of elaborate examples</h3>
+<div id="elaborateIndex" class="nodisplay">
+the first one <br/>
+the second one
+</div>
+
+
+
+
+
+
+<h3 name="imgMenu">Using images in the menu</h3>
+<div id="imgMenu" class="nodisplay">
+Sometimes you might want to add images inside of your menu, this example will show you how to do that.
+
+<div id="imgMenu1" class="menuContainer">
+	<ul id="optionEventClick" class="navigation">
+		<li><a href="javascript:void(0);">click</a></li>
+		<li><a href="javascript:void(0);">submenu1</a>
+			<ul id="submenu1OptionEventClick" class="navigation">
+				<li><img src="http://r.ddmcdn.com/w_622/u_0/gif/23-milky-way-pictures.jpg" alt="test" width="100" height="100"></img>
+				<ul id="subsubMenu1" class="navigation">
+					<li><a href="javascript:void(0);">subsubmenuitem</a></li>
+				</ul>
+				</li>
+				<li><a href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+		<li><a>submenu2</a>
+			<ul id="submenu2OptionEventClick" class="navigation">
+				<li><a>item1</a></li>
+				<li><a id="mall" href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<br/><br/><br/><br/>
+
+<div id="imgMenu2" class="menuContainer">
+	<ul id="optionEventClick" class="navigation">
+		<li><img data-url="index" src="http://r.ddmcdn.com/w_622/u_0/gif/23-milky-way-pictures.jpg" alt="test" width="200" height="50"></li>
+		<li><img src="http://r.ddmcdn.com/w_622/u_0/gif/23-milky-way-pictures.jpg" alt="test" width="200" height="50">
+			<ul id="submenu1OptionEventClick" class="navigation">
+				<li><img src="http://r.ddmcdn.com/w_622/u_0/gif/23-milky-way-pictures.jpg" alt="test" width="100" height="100"></li>
+				<li><img src="http://images.nationalgeographic.com/wpf/media-live/photos/000/228/cache/news-exoplanet-first-picture_22801_600x450.jpg" alt="test" width="100" height="100"></li>
+			</ul>
+		</li>
+		<li><img src="http://static6.businessinsider.com/image/51c3212a6bb3f79c2000000f/this-space-picture-changes-our-understanding-of-how-black-holes-form.jpg" alt="test" width="200" height="50">
+			<ul id="submenu2OptionEventClick" class="navigation">
+				<li><img src="http://images.nationalgeographic.com/wpf/media-live/photos/000/411/cache/northern-lights-picture-aurora-borealis-september-2011-yukon_41173_600x450.jpg" alt="test" width="100" height="100"></li>
+				<li><img data-url="mall" src="http://apod.nasa.gov/apod/image/1403/heic1404b1920.jpg" alt="test" width="100" height="100"></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<div id="imgMenuLoadDiv1"></div>
+<div id="imgMenuLoadDiv2"></div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#imgMenu1").menuize({"useAjax":true, "autoCorrect":"true", "ajaxLoadDiv":"imgMenuLoadDiv1", "event":"click",
+			"redirectOnVoid":false, "nonItem":"cantClickThis"});
+		$("#imgMenu2").menuize({"useAjax":"true", "autoCorrect":"true", "ajaxLoadDiv":"imgMenuLoadDiv2", "event":"click",
+			"redirectOnVoid":false, "nonItem":"cantClickThis"});
+		
+	});
+</script>
+
+
+HTML:<br/>
+<textarea class="displayCodeHTML">
+	<div id="imgMenu1" class="menuContainer">
+		<ul id="optionEventClick" class="navigation">
+			<li><a href="javascript:void(0);">click</a></li>
+			<li><a href="javascript:void(0);">submenu1</a>
+				<ul id="submenu1OptionEventClick" class="navigation">
+					<li><img src="http://r.ddmcdn.com/w_622/u_0/gif/23-milky-way-pictures.jpg" alt="test" width="100" height="100"></img>
+					<ul id="subsubMenu1" class="navigation">
+						<li><a href="javascript:void(0);">subsubmenuitem</a></li>
+					</ul>
+					</li>
+					<li><a href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+			<li><a>submenu2</a>
+				<ul id="submenu2OptionEventClick" class="navigation">
+					<li><a>item1</a></li>
+					<li><a id="mall" href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+
+	<br/><br/><br/><br/>
+
+	<div id="imgMenu2" class="menuContainer">
+		<ul id="optionEventClick" class="navigation">
+			<li><img data-url="index" src="http://r.ddmcdn.com/w_622/u_0/gif/23-milky-way-pictures.jpg" alt="test" width="200" height="50"></li>
+			<li><img src="http://r.ddmcdn.com/w_622/u_0/gif/23-milky-way-pictures.jpg" alt="test" width="200" height="50">
+				<ul id="submenu1OptionEventClick" class="navigation">
+					<li><img src="http://r.ddmcdn.com/w_622/u_0/gif/23-milky-way-pictures.jpg" alt="test" width="100" height="100"></li>
+					<li><img src="http://images.nationalgeographic.com/wpf/media-live/photos/000/228/cache/news-exoplanet-first-picture_22801_600x450.jpg" alt="test" width="100" height="100"></li>
+				</ul>
+			</li>
+			<li><img src="http://static6.businessinsider.com/image/51c3212a6bb3f79c2000000f/this-space-picture-changes-our-understanding-of-how-black-holes-form.jpg" alt="test" width="200" height="50">
+				<ul id="submenu2OptionEventClick" class="navigation">
+					<li><img src="http://images.nationalgeographic.com/wpf/media-live/photos/000/411/cache/northern-lights-picture-aurora-borealis-september-2011-yukon_41173_600x450.jpg" alt="test" width="100" height="100"></li>
+					<li><img data-url="mall" src="http://apod.nasa.gov/apod/image/1403/heic1404b1920.jpg" alt="test" width="100" height="100"></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+
+	<div id="imgMenuLoadDiv1"></div>
+	<div id="imgMenuLoadDiv2"></div>
+</textarea>
+
+
+<br/>JavaScript:<br/>
+<textarea class="displayCodeJS">
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#imgMenu1").menuize({"useAjax":true, "autoCorrect":"true", "ajaxLoadDiv":"imgMenuLoadDiv1", "event":"click",
+				"redirectOnVoid":false, "nonItem":"cantClickThis"});
+			$("#imgMenu2").menuize({"useAjax":"true", "autoCorrect":"true", "ajaxLoadDiv":"imgMenuLoadDiv2", "event":"click",
+				"redirectOnVoid":false, "nonItem":"cantClickThis"});
+			
+		});
+	</script>
+</textarea>
+<br/>
+As we can see the image gets displayed in the size that it is, so if we want to customize the size we simply add a height and width to the &lt;img&gt; element.
+</div>
+
+
+
+
+
+
+<h3 name="specificDiv">Load only a specific div from an page</h3>
+<div id="specificDiv" class="nodisplay">
+To load only a specific element(eg. a &lt;div&gt;) from a page loaded using ajax(options.useAjax == true) you simply set the page-extension to ""(you could also try
+and set this to "fileExtension #divId" but then it will do that for all menu items)  and then specify in the href the adress as follows
+"page.extension #element", an more concrete example could look like "index.php #myDiv".
+
+<div id="specificDivMenu1" class="menuContainer">
+	<ul id="optionEventClick" class="navigation">
+		<li><a id="finnsej" data-url="error.php #errorHeader" href="javascript:void(0);">click</a></li>
+		<li><a href="javascript:void(0);">submenu1</a>
+			<ul id="submenu1OptionEventClick" class="navigation">
+				<li><img src="http://r.ddmcdn.com/w_622/u_0/gif/23-milky-way-pictures.jpg" alt="test" width="100" height="100"></img>
+				<ul id="subsubMenu1" class="navigation">
+					<li><a href="javascript:void(0);">subsubmenuitem</a></li>
+				</ul>
+				</li>
+				<li><a href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+		<li><a>submenu2</a>
+			<ul id="submenu2OptionEventClick" class="navigation">
+				<li><a>item1</a></li>
+				<li><a id="mall" data-url="mall.php #mall" href="javascript:void(0);">item2</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<br/><br/><br/><br/>
+
+
+<div id="specificDivLoadDiv"></div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#specificDivMenu1").menuize({"useAjax":"true", "autoCorrect":"true", "ajaxLoadDiv":"specificDivLoadDiv", "event":"click",
+			"redirectOnVoid":false, "nonItem":"cantClickThis", "pageExtension":"", "ajaxCallbackFunction":testingCallback});
+	});
+	
+	function testingCallback(response, status, xhr, options){
+		console.log("custom callback: " + status);
+		
+		if(status === "error"){
+			$("#" + options.ajaxLoadDiv).html("Could not load the requested resource, double check so that the id etc. is correct and that the resource exist");
+		}
+	}
+</script>
+
+HTML:<br/>
+<textarea class="displayCodeHTML">
+	<div id="specificDivMenu1" class="menuContainer">
+		<ul id="optionEventClick" class="navigation">
+			<li><a id="finnsej" data-url="error.php #errorHeader" href="javascript:void(0);">click</a></li>
+			<li><a href="javascript:void(0);">submenu1</a>
+				<ul id="submenu1OptionEventClick" class="navigation">
+					<li><img src="http://r.ddmcdn.com/w_622/u_0/gif/23-milky-way-pictures.jpg" alt="test" width="100" height="100"></img>
+					<ul id="subsubMenu1" class="navigation">
+						<li><a href="javascript:void(0);">subsubmenuitem</a></li>
+					</ul>
+					</li>
+					<li><a href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+			<li><a>submenu2</a>
+				<ul id="submenu2OptionEventClick" class="navigation">
+					<li><a>item1</a></li>
+					<li><a id="mall" data-url="mall.php #mall" href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+
+	<br/><br/><br/><br/>
+
+
+	<div id="specificDivLoadDiv"></div>
+</textarea>
+
+
+<br/>JavaScript:<br/>
+<textarea class="displayCodeJS">
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#specificDivMenu1").menuize({"useAjax":"true", "autoCorrect":"true", "ajaxLoadDiv":"specificDivLoadDiv", "event":"click",
+				"redirectOnVoid":false, "nonItem":"cantClickThis", "pageExtension":"", "ajaxCallbackFunction":testingCallback});
+		});
+		
+		function testingCallback(response, status, xhr, options){
+			console.log("custom callback: " + status);
+			
+			if(status === "error"){
+				$("#" + options.ajaxLoadDiv).html("Could not load the requested resource, double check so that the id etc. is correct and that the resource exist");
+			}
+		}
+	</script>
+</textarea>
+
+<br/>
+As you can see this can be very useful for those times when you only want for example a small text from a big page. <br/>
+You should also note that you can customize it further with css selectors, eg. if you want to load all the &lt;p&gt; elements inside of a div called myDiv in
+myPage.php you could write that as "data-url='myPage.php #myDiv p'".
+</div>
+
+
+
+<h3 name="addSubmenuLevels">Add more submenu levels</h3>
+<div id="addSubmenuLevels" class="nodisplay">
+Menuizer got support for 5 levels of submenues, to add even more(if 5 ain't enough for ya) simply enter the css file and go to the part where i mention sub
+menu levels and copy and paste the three lines under the comment "Sub Menu Level 5" and just add one extra li and one extra ul to each line and do not forget to
+move the :hover or else the submenu level will appear to belong to one, one level up.<br/><br/>
+Example: <br/>
+<br/>CSS:<br/>
+<textarea class="displayCodeCSS">
+	<style type="text/css">
+		/* Sub Menu Level 6 */
+		.menuContainer > ul > li > ul > li > ul > li > ul > li > ul > li > ul > li > ul{ background-color: #000;position: absolute;
+			display: none;border: 1px solid #eee; left:100%; width: 140px; }
+		.menuContainer > ul > li > ul > li > ul > li > ul > li > ul > li > ul > li:hover > ul{ display: block; }
+		.menuContainer > ul > li > ul > li > ul > li > ul > li > ul > li > ul > li > ul > li{ position: relative; }
+	</style>
+</textarea>
+</div>
+
+<h3 name="customizeAppearance">To customize menuizer</h3>
+<div id="customizeAppearance" class="nodisplay">
+To customize menuizer you want to edit the css file, more specifically you probably want to edit the css for ul.navigation and the things below it(should
+be located near the end of the CSS-file).<br/><br/>
+Example: <br/>
+
+<br/>CSS:<br/>
+<textarea class="displayCodeCSS">
+	<style type="text/css">
+		/* INSIDE THE STYLE.CSS FILE FIND THESE AND EDIT THEM AS YOU LIKE */
+		ul.navigation
+		{
+			/* Custom css here */
+		}
+		ul.navigation li {
+			/* Custom css here */
+		}
+		ul.navigation li a {
+			/* Custom css here */
+		}
+		ul.navigation li a.selected {
+			/* Custom css here */
+		}
+	</style>
+</textarea>
+
+</div>
+
+
+<h3 name="clickableSubMenuParent">Clickable submenu parent</h3>
+<div id="clickableSubMenuParent" class="nodisplay">
+To make a submenu parent clickable you first have to turn of autoCorrect as autoCorrect will assume that if an element has children that it should not be able
+to be pressed. Then you will need to link the href to a valid page.
+<br/>
+A shortened down example is as follows:
+Turn of autoCorrect as "$("#menuId").menuize({"autoCorrect":"false"});
+Link the parent item as "&lt;li&gt;&lt;a href="validLink.php"&gt;&lt;/a&gt;&lt;ul&gt; ... &lt;/ul&gt;&lt;/li&gt;"<br/>
+
+<br/>HTML:<br/>
+<textarea class="displayCodeHTML">
+	<div id="menuId" class="menuContainer">
+		<ul id="optionEventClick" class="navigation">
+			<li><a id="finnsej" data-url="error.php #errorHeader" href="javascript:void(0);">click</a></li>
+			<li><a href="mall.php">submenu1</a>
+				<ul id="submenu1OptionEventClick" class="navigation">
+					<li><img src="http://r.ddmcdn.com/w_622/u_0/gif/23-milky-way-pictures.jpg" alt="test" width="100" height="100"></img>
+					<ul id="subsubMenu1" class="navigation">
+						<li><a href="javascript:void(0);">subsubmenuitem</a></li>
+					</ul>
+					</li>
+					<li><a href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+			<li><a href="clickableSubMenu.php">submenu2</a>
+				<ul id="submenu2OptionEventClick" class="navigation">
+					<li><a>item1</a></li>
+					<li><a id="mall" data-url="mall.php #mall" href="javascript:void(0);">item2</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+
+	<br/><br/><br/><br/>
+
+
+	<div id="specificDivLoadDiv"></div>
+</textarea>
+
+<br/>JavaScript:<br/>
+<textarea class="displayCodeJS">
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#menuId").menuize({"autoCorrect":"false"}
+		});
+	</script>
+</textarea>
+</div>
+
+<h3 name="anchorNoAJAX">Anchor in the same document</h3>
+<div id="anchorNoAJAX" class="nodisplay">
+If you simply want an menu which goes to a specific part of document using an anchor, you just turn of the AJAX("useAjax":"false") and the
+autoCorrect("autoCorrect":"false"), you can also turn of the redirectOnVoid("redirectOnVoid":false) option as this can cause weird behavior if you are using
+"javascript:void(0);" inside your href-attributes.
+And then you simply set the href parts to the anchor parts that you have created in the document.<br/><br/>
+
+<div id="anchorNoAJAXMenu1" class="menuContainer">
+	<ul id="anchorNoAJAX1" class="navigation">
+		<li><a href="#bottom">bottom</a></li>
+		<li><a href="javascript:void(0);">submenu1</a>
+			<ul id="submenu1OptionEventClick" class="navigation">
+				<li><a href="#bottom">also bottom</a></li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#anchorNoAJAXMenu1").menuize({"useAjax":false, "autoCorrect":"false", "redirectOnVoid":false});
+	});
+</script>
+
+<textarea class="displayCodeHTML">
+	<div id="anchorNoAJAXMenu1" class="menuContainer">
+		<ul id="anchorNoAJAX1" class="navigation">
+			<li><a href="#Installation">Installation</a></li>
+			<li><a href="javascript:void(0);">submenu1</a>
+				<ul id="submenu1OptionEventClick" class="navigation">
+					<li><a href="javascript:void(0);">middle</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</textarea>
+
+<textarea class="displayCodeJS">
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#anchorNoAJAXMenu1").menuize({"useAjax":false, "autoCorrect":"false", "redirectOnVoid":false});
+		});
+	</script>
+</textarea>
+
+</div>
+
+
+<br/><br/><br/>
+
+
+
+<p>Some final notes, if you encounter any errors while using menuizer make sure that you look over the options so that they truly are the way they are suppose
+to, try turning the autoCorrect option on/off as this may create an entirely different behavior.<br/>
+And also note that the only files you require to run menuizer(other than jQuery itself) is the menuizer.js file and the style file that comes with it.</p>
+
+<a id="bottom" name="bottom">bottom</a>
+</body>
+</html>
